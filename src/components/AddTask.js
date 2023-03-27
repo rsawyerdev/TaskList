@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import uuid from 'react-native-uuid';
 
-export default function AddTask() {
+export default function AddTask(props) {
 
-    const [taskText, updateText] = useState('')
+    const [taskText, updateText] = useState('');
 
     const addTask = () => {
-        console.log("Add a task", taskText)
-    }
+        const key = uuid.v4();
+        const newTask = {title: taskText, id: key};
+        props.createTask(newTask);
+        updateText('');
+    };
 
     return (
         <View style={styles.addTaskContainer}>
@@ -21,7 +25,7 @@ export default function AddTask() {
             style={styles.textInput}
             />
         </View>
-    );s
+    );
 }
 
 const styles = StyleSheet.create({
