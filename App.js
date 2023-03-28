@@ -2,12 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { 
   StyleSheet, 
-  Text, 
   SafeAreaView, 
   KeyboardAvoidingView, 
   Dimensions,
   FlatList
 } from 'react-native';
+import { Text } from 'react-native-paper'
 
 import AddTask from './src/components/AddTask';
 import Task from './src/components/Task';
@@ -26,7 +26,7 @@ export default function App() {
     <SafeAreaView style={{flex:1}}>
       <KeyboardAvoidingView style={styles.container} behavior='padding'>
         <StatusBar style='auto' />
-        <Text>Task List</Text>
+        <Text variant='headlineLarge'>Task List</Text>
         <FlatList 
           data={taskList}
           renderItem={(task) => <Task title={task.item.title} />}

@@ -1,15 +1,43 @@
-import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { Divider, Card } from 'react-native-paper';
+import React, { useState } from 'react';
+import { View, StyleSheet  } from 'react-native';
+import { Card, TextInput  } from 'react-native-paper';
 
 export default function Task(props) {
 
+    const [editMode, setEditMode] = useState(false)
+    const [text, setText] = useState(props.title)
+
+    const toggleEdit = () => {
+        setEditMode(!editMode)
+    }
+
+    const deleteTask = () => {
+        console.log('edit')
+    }
+
     return (
         <View style={styles.taskContainer}>
-            <Card style={styles.card}>
-                <Text style={styles.cardText}>{props.title}</Text>
-            </Card>
-            <Divider />
+            {editMode ?
+                <View style={styles.card} onPress={toggleEdit}>
+                    <TextInput
+                        value={text}
+                        onChangeText={text => setText(text)}
+                        onBlur={toggleEdit}
+                        right={<TextInput.Icon 
+                                icon='delete' 
+                                onPress={deleteTask} />}
+                        style={styles.editMode}
+                    />
+                </View>
+                :
+                <Card style={styles.card}>
+                    <TextInput 
+                        style={styles.cardText} 
+                        onFocus={toggleEdit} 
+                        value={props.title}
+                        />
+                </Card>
+            }
         </View>
     );
 }
@@ -30,5 +58,12 @@ const styles = StyleSheet.create({
     },
     cardText: {
         fontSize: 18,
+        backgroundColor: 'none',
+        
+    
+    },
+    editMode: {
+        width: '100%'
     }
+   
 })
