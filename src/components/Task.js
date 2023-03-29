@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, } from 'react-native';
 import { Card, TextInput, IconButton } from 'react-native-paper';
 
 export default function Task(props) {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(props.title)
+    const [taskComplete, isTaskComplete] = useState(false)
 
     const toggleEdit = () => {
         setEditMode(!editMode)
@@ -20,36 +21,45 @@ export default function Task(props) {
         toggleEdit()
     }
 
+    setTaskComplete = () => {
+        isTaskComplete(!taskComplete)
+    }
+
     return (
         <View style={styles.taskContainer}>
             {editMode ?
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={styles.card} >
-                        <TextInput
-                            value={text}
-                            onChangeText={text => setText(text)}
-                            onBlur={toggleEdit}
-                            right={<TextInput.Icon
-                                icon='delete'
-                                onPress={removeTask}
-                            />}
-                            left={<TextInput.Icon
-                                icon='content-save'
-                                onPress={saveTask}
-                            />}
-                            style={styles.editMode}
-                        />
-                    </View>
-                    <IconButton icon='menu' />
+                <View style={styles.card} >
+                    <TextInput
+                        value={text}
+                        onChangeText={text => setText(text)}
+                        onBlur={toggleEdit}
+                        right={<TextInput.Icon
+                            icon='delete'
+                            onPress={removeTask}
+                        />}
+                        left={<TextInput.Icon
+                            icon='content-save'
+                            onPress={saveTask}
+                        />}
+                        style={styles.editMode}
+                    />
                 </View>
                 :
-                <View style={styles.card}>
-                    <TextInput
-                        style={styles.cardText}
-                        onFocus={toggleEdit}
-                        value={props.title}
-
+                <View style={styles.buttonWrapper}>
+                    <IconButton
+                        onPress={setTaskComplete}
+                        icon={taskComplete ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'}
+                        iconColor={taskComplete ? 'green' : 'red'}
+                        size={30}
                     />
+                    <View style={styles.card}>
+                        <TextInput
+                            style={styles.cardText}
+                            onFocus={toggleEdit}
+                            value={props.title}
+
+                        />
+                    </View>
                 </View>
             }
         </View>
@@ -65,8 +75,6 @@ const styles = StyleSheet.create({
     card: {
         minHeight: 50,
         minWidth: 250,
-        alignItems: 'flex-start',
-        justifyContent: 'center',
         paddingLeft: 5,
         paddingVertical: 10
     },
@@ -78,6 +86,10 @@ const styles = StyleSheet.create({
     },
     editMode: {
         width: '100%'
+    },
+    buttonWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 
 })
