@@ -15,6 +15,11 @@ export default function Task(props) {
         console.log('edit')
     }
 
+    const saveTask = () => {
+        props.updateTask({title: text, id: props.id})
+        toggleEdit()
+    }
+
     return (
         <View style={styles.taskContainer}>
             {editMode ?
@@ -26,6 +31,10 @@ export default function Task(props) {
                         right={<TextInput.Icon 
                                 icon='delete' 
                                 onPress={deleteTask} />}
+                        left={<TextInput.Icon 
+                                icon='content-save'
+                                onPress={saveTask}
+                        />}
                         style={styles.editMode}
                     />
                 </View>

@@ -16,11 +16,18 @@ export default function App() {
 
   const [taskList, updateTaskList] = useState([]);
 
-  const createTask = (props) => {
+  const createTask = (task) => {
     const newTaskList = taskList.concat();
-    newTaskList.push(props);
+    newTaskList.push(task);
     updateTaskList(newTaskList)
   };
+
+  const updateTask = (newTask) => {
+    const newTaskList = taskList.concat()
+    const index = newTaskList.findIndex((task) => task.id === newTask.id)
+    newTaskList.splice(index, 1, newTask)
+    updateTaskList(newTaskList)
+  }
 
   return (
     <SafeAreaView style={{flex:1}}>
@@ -29,7 +36,11 @@ export default function App() {
         <Text variant='headlineLarge'>Task List</Text>
         <FlatList 
           data={taskList}
-          renderItem={(task) => <Task title={task.item.title} />}
+          renderItem={(task) => <Task 
+              title={task.item.title} 
+              id={task.item.id} 
+              updateTask={updateTask}
+              taskList={taskList}/>}
           keyExtractor={(task) => task.id}
         />
         <AddTask createTask={createTask}/>
