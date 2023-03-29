@@ -29,6 +29,13 @@ export default function App() {
     updateTaskList(newTaskList)
   }
 
+  const deleteTask = (removeTask) => {
+    const newTaskList = taskList.concat()
+    const index = newTaskList.findIndex((task) => task.id === removeTask.id)
+    newTaskList.splice(index, 1)
+    updateTaskList(newTaskList)
+  }
+
   return (
     <SafeAreaView style={{flex:1}}>
       <KeyboardAvoidingView style={styles.container} behavior='padding'>
@@ -40,7 +47,10 @@ export default function App() {
               title={task.item.title} 
               id={task.item.id} 
               updateTask={updateTask}
-              taskList={taskList}/>}
+              taskList={taskList}
+              deleteTask={deleteTask}
+              />}
+              
           keyExtractor={(task) => task.id}
         />
         <AddTask createTask={createTask}/>
