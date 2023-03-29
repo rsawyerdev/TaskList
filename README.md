@@ -31,9 +31,8 @@ once started, a QR code will appear
 #### please be sure to have xCode or Android Studio installed
 
 - clone the repository by running the following command in your terminal:
- ```bash
+
     git clone git@github.com:rsawyerdev/TaskList.git
-    ```
 
 - open the TaskList project in your favorite IDE
 
