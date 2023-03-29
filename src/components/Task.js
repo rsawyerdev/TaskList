@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet  } from 'react-native';
-import { Card, TextInput  } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card, TextInput, IconButton } from 'react-native-paper';
 
 export default function Task(props) {
 
@@ -11,41 +11,46 @@ export default function Task(props) {
         setEditMode(!editMode)
     }
 
-    const deleteTask = () => {
-        console.log('edit')
+    const removeTask = () => {
+        props.deleteTask({ title: text, id: props.id })
     }
 
     const saveTask = () => {
-        props.updateTask({title: text, id: props.id})
+        props.updateTask({ title: text, id: props.id })
         toggleEdit()
     }
 
     return (
         <View style={styles.taskContainer}>
             {editMode ?
-                <View style={styles.card} onPress={toggleEdit}>
-                    <TextInput
-                        value={text}
-                        onChangeText={text => setText(text)}
-                        onBlur={toggleEdit}
-                        right={<TextInput.Icon 
-                                icon='delete' 
-                                onPress={deleteTask} />}
-                        left={<TextInput.Icon 
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={styles.card} >
+                        <TextInput
+                            value={text}
+                            onChangeText={text => setText(text)}
+                            onBlur={toggleEdit}
+                            right={<TextInput.Icon
+                                icon='delete'
+                                onPress={removeTask}
+                            />}
+                            left={<TextInput.Icon
                                 icon='content-save'
                                 onPress={saveTask}
-                        />}
-                        style={styles.editMode}
-                    />
+                            />}
+                            style={styles.editMode}
+                        />
+                    </View>
+                    <IconButton icon='menu' />
                 </View>
                 :
-                <Card style={styles.card}>
-                    <TextInput 
-                        style={styles.cardText} 
-                        onFocus={toggleEdit} 
+                <View style={styles.card}>
+                    <TextInput
+                        style={styles.cardText}
+                        onFocus={toggleEdit}
                         value={props.title}
-                        />
-                </Card>
+
+                    />
+                </View>
             }
         </View>
     );
@@ -68,11 +73,11 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 18,
         backgroundColor: 'none',
-        
-    
+
+
     },
     editMode: {
         width: '100%'
     }
-   
+
 })
