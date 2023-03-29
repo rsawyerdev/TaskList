@@ -50,3 +50,8 @@ or
 ```bash
 npx expo start --android
 ```
+
+## Notes
+
+I chose not to fix the bugs related to the react-native-paper library prior to QA.
+
