@@ -6,25 +6,26 @@ export default function Task(props) {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(props.title)
-    const [taskComplete, isTaskComplete] = useState(false)
+    const [complete, isTaskComplete] = useState(props.done)
 
     const toggleEdit = () => {
         setEditMode(!editMode)
     }
 
     const removeTask = () => {
-        props.deleteTask({ title: text, id: props.id })
+        props.deleteTask({ title: text, id: props.id, done: props.done })
     }
 
     const saveTask = () => {
-        props.updateTask({ title: text, id: props.id })
+        props.updateTask({ title: text, id: props.id, done: props.done })
         toggleEdit()
     }
 
-    setTaskComplete = () => {
-        isTaskComplete(!taskComplete)
+    const setTaskComplete = () => {
+        isTaskComplete(!complete)
+        props.updateTask({ title: text, id: props.id, done: !props.done  })
     }
-
+    
     return (
         <View style={styles.taskContainer}>
             {editMode ?
@@ -48,8 +49,8 @@ export default function Task(props) {
                 <View style={styles.buttonWrapper}>
                     <IconButton
                         onPress={setTaskComplete}
-                        icon={taskComplete ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'}
-                        iconColor={taskComplete ? 'green' : 'red'}
+                        icon={complete ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'}
+                        iconColor={complete ? 'green' : 'red'}
                         size={30}
                     />
                     <View style={styles.card}>

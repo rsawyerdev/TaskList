@@ -72,7 +72,8 @@ export default function App() {
           data={taskList}
           renderItem={(task) => <Task 
               title={task.item.title} 
-              id={task.item.id} 
+              id={task.item.id}
+              done={task.item.done} 
               updateTask={updateTask}
               taskList={taskList}
               deleteTask={deleteTask}
