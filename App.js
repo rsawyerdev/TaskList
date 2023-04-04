@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
   SafeAreaView, 
@@ -7,7 +7,8 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import { Text } from 'react-native-paper'
+import { Text } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AddTask from './src/components/AddTask';
 import Task from './src/components/Task';
@@ -16,10 +17,34 @@ export default function App() {
 
   const [taskList, updateTaskList] = useState([]);
 
+  useEffect(() => {
+    checkStorage()
+  }, []);
+
+  const checkStorage = async () => {
+    try{
+      const jsonValue = await AsyncStorage.getItem('@storage_Task')
+      const storageTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
+      updateTaskList(storageTasks)
+    } catch (e) {
+      console.log('storage error', e)
+    }
+  }
+
+  const taskStorage = async (tasks) => {
+    try {
+      const taskValue = JSON.stringify(tasks)
+      await AsyncStorage.setItem('@storage_Task', taskValue)
+    } catch(e) {
+      console.log('error', e)
+    }
+  }
+
   const createTask = (task) => {
     const newTaskList = taskList.concat();
     newTaskList.push(task);
     updateTaskList(newTaskList)
+    taskStorage(newTaskList)
   };
 
   const updateTask = (newTask) => {
@@ -27,6 +52,7 @@ export default function App() {
     const index = newTaskList.findIndex((task) => task.id === newTask.id)
     newTaskList.splice(index, 1, newTask)
     updateTaskList(newTaskList)
+    taskStorage(newTaskList)
   }
 
   const deleteTask = (removeTask) => {
@@ -34,6 +60,7 @@ export default function App() {
     const index = newTaskList.findIndex((task) => task.id === removeTask.id)
     newTaskList.splice(index, 1)
     updateTaskList(newTaskList)
+    taskStorage(newTaskList)
   }
 
   return (
