@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
     StyleSheet,
-    View,
+    KeyboardAvoidingView,
     Dimensions,
     FlatList
 } from 'react-native';
@@ -38,13 +38,6 @@ export default function CreateLedger() {
         }
     }
 
-    const createTask = (task) => {
-        const newTaskList = taskList.concat();
-        newTaskList.push(task);
-        updateTaskList(newTaskList)
-        taskStorage(newTaskList)
-    };
-
     const updateTask = (newTask) => {
         const newTaskList = taskList.concat()
         const index = newTaskList.findIndex((task) => task.id === newTask.id)
@@ -62,22 +55,9 @@ export default function CreateLedger() {
     }
 
     return (
-        <View style={styles.container} behavior='position'>
-            <Text variant='headlineLarge'>Ledger</Text>
-            <FlatList
-                data={taskList}
-                renderItem={(task) => <Task
-                    title={task.item.title}
-                    id={task.item.id}
-                    done={task.item.done}
-                    updateTask={updateTask}
-                    taskList={taskList}
-                    deleteTask={deleteTask}
-                />}
-                keyExtractor={(task) => task.id}
-            />
-            <AddTask createTask={createTask} />
-        </View>
+        <KeyboardAvoidingView style={styles.container} behavior='padding'>
+            <Text variant='headlineLarge'>Pass Ledger</Text>
+        </KeyboardAvoidingView>
     );
 }
 

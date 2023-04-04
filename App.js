@@ -2,10 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { 
   StyleSheet, 
   SafeAreaView, 
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
 import CreateLedger from './src/containers/CreateLedger';
+import TaskList from './src/containers/TaskList'
 
 export default function App() {
 
@@ -14,6 +15,7 @@ export default function App() {
     <SafeAreaView style={{flex:1}}>
         <StatusBar style='auto' />
         <CreateLedger />
+        <TaskList />
     </SafeAreaView>
   );
 }
