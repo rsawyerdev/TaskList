@@ -9,7 +9,7 @@ import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AddTask from '../components/AddTask';
-import Task from '../components/Task';
+import LedgerItem from '../components/LedgerItem'
 
 export default function CreateLedger() {
 
@@ -62,21 +62,21 @@ export default function CreateLedger() {
     }
 
     return (
-        <View style={styles.container} behavior='position'>
-            <Text variant='headlineLarge'>Ledger</Text>
-            <FlatList
-                data={taskList}
-                renderItem={(task) => <Task
-                    title={task.item.title}
-                    id={task.item.id}
-                    done={task.item.done}
-                    updateTask={updateTask}
-                    taskList={taskList}
-                    deleteTask={deleteTask}
-                />}
-                keyExtractor={(task) => task.id}
-            />
-            <AddTask createTask={createTask} />
+        <View style={styles.container}>
+            <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
+                <FlatList
+                    data={taskList}
+                    renderItem={(task) => <LedgerItem
+                        title={task.item.title}
+                        id={task.item.id}
+                        done={task.item.done}
+                        updateTask={updateTask}
+                        taskList={taskList}
+                        deleteTask={deleteTask}
+                    />}
+                    keyExtractor={(task) => task.id}
+                />
+                <AddTask createTask={createTask} />
         </View>
     );
 }
@@ -85,10 +85,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'space-between',
-        paddingVertical: 10,
-        width: Dimensions.get('screen').width
+        paddingVertical: 20,
+        width: Dimensions.get('screen').width,
+        paddingHorizontal: 10
 
     },
+    headerText: {
+        textAlign: 'center'
+    }
 });

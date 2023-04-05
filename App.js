@@ -12,7 +12,7 @@ export default function App() {
 
 
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={styles.container}>
         <StatusBar style='auto' />
         <CreateLedger />
         <TaskList />
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 10,
-    width: Dimensions.get('screen').width
+    width: Dimensions.get('screen').width,
   },
 });
