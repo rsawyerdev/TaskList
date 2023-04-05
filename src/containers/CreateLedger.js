@@ -13,7 +13,7 @@ import LedgerItem from '../components/LedgerItem'
 
 export default function CreateLedger() {
 
-    const [taskList, updateTaskList] = useState([]);
+    const [ledgerList, updateLedgerList] = useState([]);
 
     useEffect(() => {
         checkStorage()
@@ -21,62 +21,69 @@ export default function CreateLedger() {
 
     const checkStorage = async () => {
         try {
-            const jsonValue = await AsyncStorage.getItem('@storage_Task')
-            const storageTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-            updateTaskList(storageTasks)
+            const jsonValue = await AsyncStorage.getItem('@storage_Ledger')
+            const storageLedgers = jsonValue != null ? JSON.parse(jsonValue) : null;
+            updateLedgerList(storageLedgers)
         } catch (e) {
             console.log('storage error', e)
         }
     }
 
-    const taskStorage = async (tasks) => {
+    const ledgerStorage = async (ledgers) => {
         try {
-            const taskValue = JSON.stringify(tasks)
-            await AsyncStorage.setItem('@storage_Task', taskValue)
+            const ledgerValue = JSON.stringify(ledgers)
+            await AsyncStorage.setItem('@storage_Ledger', ledgerValue)
         } catch (e) {
             console.log('error', e)
         }
     }
 
-    const createTask = (task) => {
-        const newTaskList = taskList.concat();
-        newTaskList.push(task);
-        updateTaskList(newTaskList)
-        taskStorage(newTaskList)
+    const createLedger = (ledger) => {
+        if (ledgerList) {
+            const newLedgerList = ledgerList.concat();
+            newLedgerList.push(ledger);
+            updateLedgerList(newLedgerList)
+            ledgerStorage(newLedgerList)
+        } else {
+            newLedgerList = new Array
+            newLedgerList.push(ledger);
+            updateLedgerList(newLedgerList)
+            ledgerStorage(newLedgerList)
+        }
+
     };
 
-    const updateTask = (newTask) => {
-        const newTaskList = taskList.concat()
-        const index = newTaskList.findIndex((task) => task.id === newTask.id)
-        newTaskList.splice(index, 1, newTask)
-        updateTaskList(newTaskList)
-        taskStorage(newTaskList)
+    const updateLedger = (newLedger) => {
+        const newLedgerList = ledgerList.concat()
+        const index = newLedgerList.findIndex((ledger) => ledger.id === newLedger.id)
+        newLedgerList.splice(index, 1, newLedger)
+        updateLedgerList(newLedgerList)
+        ledgerStorage(newLedgerList)
     }
 
-    const deleteTask = (removeTask) => {
-        const newTaskList = taskList.concat()
-        const index = newTaskList.findIndex((task) => task.id === removeTask.id)
-        newTaskList.splice(index, 1)
-        updateTaskList(newTaskList)
-        taskStorage(newTaskList)
+    const deleteLedger = (removeLedger) => {
+        const newLedgerList = ledgerList.concat()
+        const index = newLedgerList.findIndex((ledger) => ledger.id === removeLedger.id)
+        newLedgerList.splice(index, 1)
+        updateLedgerList(newLedgerList)
+        ledgerStorage(newLedgerList)
     }
 
     return (
         <View style={styles.container}>
             <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
-                <FlatList
-                    data={taskList}
-                    renderItem={(task) => <LedgerItem
-                        title={task.item.title}
-                        id={task.item.id}
-                        done={task.item.done}
-                        updateTask={updateTask}
-                        taskList={taskList}
-                        deleteTask={deleteTask}
-                    />}
-                    keyExtractor={(task) => task.id}
-                />
-                <AddTask createTask={createTask} />
+            <FlatList
+                data={ledgerList}
+                renderItem={(ledger) => <LedgerItem
+                    title={ledger.item.title}
+                    id={ledger.item.id}
+                    done={ledger.item.done}
+                    updateLedger={updateLedger}
+                    deleteLedger={deleteLedger}
+                />}
+                keyExtractor={(ledger) => ledger.id}
+            />
+            <AddTask createLedger={createLedger} />
         </View>
     );
 }

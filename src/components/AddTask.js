@@ -10,7 +10,7 @@ export default function AddTask(props) {
     const addTask = () => {
         const key = uuid.v4();
         const newTask = {title: taskText, id: key, done: false};
-        props.createTask(newTask);
+        props.createLedger(newTask);
         updateText('');
     };
 

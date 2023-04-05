@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { IconButton, TextInput } from 'react-native-paper';
 
-export default function Task(props) {
+export default function LedgerItem(props) {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(props.title)
+    const [passed, passLedgerItem] = useState(props.done)
+
 
     const toggleEdit = () => {
         setEditMode(!editMode)
     }
 
-    const removeTask = () => {
-        props.deleteTask({ title: text, id: props.id, done: props.done })
+    const removeLedger = () => {
+        props.deleteLedger({ title: text, id: props.id, done: props.done })
     }
 
-    const saveTask = () => {
-        props.updateTask({ title: text, id: props.id, done: props.done })
+    const saveLedger = () => {
+        props.updateLedger({ title: text, id: props.id, done: props.done })
         toggleEdit()
+    }
+
+    const passToTask = () => {
+        passLedgerItem(!passed)
+        props.updateLedger({ title: text, id: props.id, done: !props.done  })
     }
     
     return (
@@ -30,16 +37,23 @@ export default function Task(props) {
                         onBlur={toggleEdit}
                         right={<TextInput.Icon
                             icon='delete'
-                            onPress={removeTask}
+                            onPress={removeLedger}
                         />}
                         left={<TextInput.Icon
                             icon='content-save'
-                            onPress={saveTask}
+                            onPress={saveLedger}
                         />}
                         style={styles.editMode}
                     />
                 </View>
                 :
+                <View style={styles.buttonWrapper}>
+                <IconButton
+                    onPress={passToTask}
+                    icon={'arrow-down-bold-box'}
+                    iconColor={passed ? 'green' : 'grey'}
+                    size={30}
+                />
                     <View style={styles.card}>
                         <TextInput
                             style={styles.cardText}
@@ -47,6 +61,7 @@ export default function Task(props) {
                             value={props.title}
 
                         />
+                    </View>
                     </View>
             }
         </View>
@@ -73,6 +88,10 @@ const styles = StyleSheet.create({
     },
     editMode: {
         width: '100%'
+    },
+    buttonWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 
 })

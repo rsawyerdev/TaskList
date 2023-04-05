@@ -8,10 +8,9 @@ import {
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import AddTask from '../components/AddTask';
 import Task from '../components/Task';
 
-export default function CreateLedger() {
+export default function TaskList() {
 
     const [taskList, updateTaskList] = useState([]);
 
@@ -57,6 +56,18 @@ export default function CreateLedger() {
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Text variant='headlineLarge'>Pass Ledger</Text>
+            <FlatList
+                    data={taskList}
+                    renderItem={(task) => <Task
+                        title={task.item.title}
+                        id={task.item.id}
+                        done={task.item.done}
+                        updateTask={updateTask}
+                        taskList={taskList}
+                        deleteTask={deleteTask}
+                    />}
+                    keyExtractor={(task) => task.id}
+                />
         </KeyboardAvoidingView>
     );
 }
