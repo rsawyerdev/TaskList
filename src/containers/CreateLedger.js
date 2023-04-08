@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,12 +8,13 @@ import {
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { ledgerListContext } from '../context/LedgerListProvider';
 import AddTask from '../components/AddTask';
 import LedgerItem from '../components/LedgerItem'
 
 export default function CreateLedger() {
 
-    const [taskList, updateTaskList] = useState([]);
+    const [ledgerList, setLedgerList] = useContext(ledgerListContext);
 
     useEffect(() => {
         checkStorage()
@@ -23,7 +24,7 @@ export default function CreateLedger() {
         try {
             const jsonValue = await AsyncStorage.getItem('@storage_Task')
             const storageTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-            updateTaskList(storageTasks)
+            setLedgerList(storageTasks)
         } catch (e) {
             console.log('storage error', e)
         }
@@ -39,25 +40,25 @@ export default function CreateLedger() {
     }
 
     const createTask = (task) => {
-        const newTaskList = taskList.concat();
+        const newTaskList = ledgerList.concat();
         newTaskList.push(task);
-        updateTaskList(newTaskList)
+        setLedgerList(newTaskList)
         taskStorage(newTaskList)
     };
 
     const updateTask = (newTask) => {
-        const newTaskList = taskList.concat()
+        const newTaskList = ledgerList.concat()
         const index = newTaskList.findIndex((task) => task.id === newTask.id)
         newTaskList.splice(index, 1, newTask)
-        updateTaskList(newTaskList)
+        setLedgerList(newTaskList)
         taskStorage(newTaskList)
     }
 
     const deleteTask = (removeTask) => {
-        const newTaskList = taskList.concat()
+        const newTaskList = ledgerList.concat()
         const index = newTaskList.findIndex((task) => task.id === removeTask.id)
         newTaskList.splice(index, 1)
-        updateTaskList(newTaskList)
+        setLedgerList(newTaskList)
         taskStorage(newTaskList)
     }
 
@@ -65,13 +66,13 @@ export default function CreateLedger() {
         <View style={styles.container}>
             <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
                 <FlatList
-                    data={taskList}
+                    data={ledgerList}
                     renderItem={(task) => <LedgerItem
                         title={task.item.title}
                         id={task.item.id}
                         done={task.item.done}
                         updateTask={updateTask}
-                        taskList={taskList}
+                        ledgerList={ledgerList}
                         deleteTask={deleteTask}
                     />}
                     keyExtractor={(task) => task.id}
