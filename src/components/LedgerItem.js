@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, } from 'react-native';
-import { Card, TextInput, IconButton } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
 export default function Task(props) {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(props.title)
-    const [complete, isTaskComplete] = useState(props.done)
 
     const toggleEdit = () => {
         setEditMode(!editMode)
@@ -19,11 +18,6 @@ export default function Task(props) {
     const saveTask = () => {
         props.updateTask({ title: text, id: props.id, done: props.done })
         toggleEdit()
-    }
-
-    const setTaskComplete = () => {
-        isTaskComplete(!complete)
-        props.updateTask({ title: text, id: props.id, done: !props.done  })
     }
     
     return (
@@ -46,13 +40,6 @@ export default function Task(props) {
                     />
                 </View>
                 :
-                <View style={styles.buttonWrapper}>
-                    <IconButton
-                        onPress={setTaskComplete}
-                        icon={complete ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'}
-                        iconColor={complete ? 'green' : 'red'}
-                        size={30}
-                    />
                     <View style={styles.card}>
                         <TextInput
                             style={styles.cardText}
@@ -61,7 +48,6 @@ export default function Task(props) {
 
                         />
                     </View>
-                </View>
             }
         </View>
     );
@@ -69,7 +55,7 @@ export default function Task(props) {
 
 const styles = StyleSheet.create({
     taskContainer: {
-        paddingVertical: 5,
+        paddingVertical: 2,
         paddingHorizontal: 2
 
     },
@@ -87,10 +73,6 @@ const styles = StyleSheet.create({
     },
     editMode: {
         width: '100%'
-    },
-    buttonWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center'
     }
 
 })

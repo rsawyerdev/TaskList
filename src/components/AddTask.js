@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import uuid from 'react-native-uuid';
 
@@ -9,7 +9,7 @@ export default function AddTask(props) {
 
     const addTask = () => {
         const key = uuid.v4();
-        const newTask = {title: taskText, id: key};
+        const newTask = {title: taskText, id: key, done: false};
         props.createTask(newTask);
         updateText('');
     };
@@ -30,10 +30,6 @@ export default function AddTask(props) {
 
 const styles = StyleSheet.create({
     addTaskContainer: {
-        flexDirection: 'row',
-        width: Dimensions.get('screen').width,
-        paddingHorizontal: 10,
-        justifyContent: 'space-between'
     },
     textInput: {
         width: '100%'
