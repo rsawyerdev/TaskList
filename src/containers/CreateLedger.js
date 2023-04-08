@@ -9,12 +9,14 @@ import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ledgerListContext } from '../context/LedgerListProvider';
+import { taskListContext } from '../context/TaskListProvider';
 import AddTask from '../components/AddTask';
 import LedgerItem from '../components/LedgerItem'
 
 export default function CreateLedger() {
 
     const [ledgerList, setLedgerList] = useContext(ledgerListContext);
+    const [taskList, setTaskList] = useContext(taskListContext);
 
     useEffect(() => {
         checkLedgerStorage()
@@ -39,11 +41,25 @@ export default function CreateLedger() {
         }
     }
 
+    const taskStorage = async (tasks) => {
+        try {
+            const taskValue = JSON.stringify(tasks)
+            await AsyncStorage.setItem('@storage_Task', taskValue)
+        } catch (e) {
+            console.log('error', e)
+        }
+    }
+
     const createLedger = (ledger) => {
+        if(ledgerList){
         const newLedgerList = ledgerList.concat();
         newLedgerList.push(ledger);
         setLedgerList(newLedgerList)
         storeLedger(newLedgerList)
+        } else {
+            setLedgerList(ledger)
+            storeLedger(ledger)
+        }
     };
 
     const updateLedger = (newLedger) => {
@@ -62,6 +78,24 @@ export default function CreateLedger() {
         storeLedger(newLedgerList)
     }
 
+    const moveLedger = (ledger) => {
+        if(taskList){
+        const newTaskList = taskList.concat()
+        newTaskList.push(ledger)
+        setTaskList(newTaskList)
+        taskStorage(newTaskList)
+        } else {
+            setTaskList(ledger)
+            taskStorage(ledger)
+        }
+        const newLedgerList = ledgerList.concat()
+        const index = newLedgerList.findIndex((item) => item.id === ledger.id)
+        newLedgerList.splice(index, 1)
+        setLedgerList(newLedgerList)
+        storeLedger(newLedgerList)
+    } 
+
+    console.log('createLedger')
     return (
         <View style={styles.container}>
             <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
@@ -74,6 +108,7 @@ export default function CreateLedger() {
                         updateLedger={updateLedger}
                         ledgerList={ledgerList}
                         deleteLedger={deleteLedger}
+                        moveLedger={moveLedger}
                     />}
                     keyExtractor={(ledger) => ledger.id}
                 />

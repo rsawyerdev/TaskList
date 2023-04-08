@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import {
     StyleSheet,
     KeyboardAvoidingView,
@@ -8,11 +8,12 @@ import {
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { taskListContext } from '../context/TaskListProvider';
 import Task from '../components/Task';
 
 export default function TaskList() {
 
-    const [taskList, updateTaskList] = useState([]);
+    const [taskList, setTaskList] = useContext(taskListContext);
 
     useEffect(() => {
         checkStorage()
@@ -22,7 +23,7 @@ export default function TaskList() {
         try {
             const jsonValue = await AsyncStorage.getItem('@storage_Task')
             const storageTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-            updateTaskList(storageTasks)
+            setTaskList(storageTasks)
         } catch (e) {
             console.log('storage error', e)
         }
@@ -41,7 +42,7 @@ export default function TaskList() {
         const newTaskList = taskList.concat()
         const index = newTaskList.findIndex((task) => task.id === newTask.id)
         newTaskList.splice(index, 1, newTask)
-        updateTaskList(newTaskList)
+        setTaskList(newTaskList)
         taskStorage(newTaskList)
     }
 
@@ -49,7 +50,7 @@ export default function TaskList() {
         const newTaskList = taskList.concat()
         const index = newTaskList.findIndex((task) => task.id === removeTask.id)
         newTaskList.splice(index, 1)
-        updateTaskList(newTaskList)
+        setTaskList(newTaskList)
         taskStorage(newTaskList)
     }
 

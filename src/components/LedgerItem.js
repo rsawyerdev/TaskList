@@ -6,8 +6,6 @@ export default function LedgerItem(props) {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(props.title)
-    const [passed, passLedgerItem] = useState(props.done)
-
 
     const toggleEdit = () => {
         setEditMode(!editMode)
@@ -23,8 +21,7 @@ export default function LedgerItem(props) {
     }
 
     const passToTask = () => {
-        passLedgerItem(!passed)
-        props.updateLedger({ title: text, id: props.id, done: !props.done  })
+        props.moveLedger({ title: text, id: props.id, done: props.done  })
     }
     
     return (
@@ -51,7 +48,7 @@ export default function LedgerItem(props) {
                 <IconButton
                     onPress={passToTask}
                     icon={'arrow-down-bold-box'}
-                    iconColor={passed ? 'green' : 'grey'}
+                    iconColor='grey'
                     size={30}
                 />
                     <View style={styles.card}>
