@@ -9,20 +9,20 @@ export default function AddTask(props) {
 
     const addTask = () => {
         const key = uuid.v4();
-        const newTask = {title: taskText, id: key, done: false};
-        props.createTask(newTask);
+        const newTask = { title: taskText, id: key, done: false };
+        props.createLedger(newTask);
         updateText('');
     };
 
     return (
         <View style={styles.addTaskContainer}>
-            <TextInput 
-            right={<TextInput.Icon icon="plus-circle-outline" onPress={addTask}/>}
-            placeholder='What do you need to do?'
-            mode='outlined'
-            onChangeText={text => updateText(text)}
-            value={taskText}
-            style={styles.textInput}
+            <TextInput
+                right={<TextInput.Icon icon="plus-circle-outline" onPress={addTask} />}
+                placeholder='What do you need to do?'
+                mode='outlined'
+                onChangeText={text => updateText(text)}
+                value={taskText}
+                style={styles.textInput}
             />
         </View>
     );
