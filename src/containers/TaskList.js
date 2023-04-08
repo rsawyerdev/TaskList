@@ -58,17 +58,17 @@ export default function TaskList() {
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Text variant='headlineLarge'>Pass Ledger</Text>
             <FlatList
-                    data={taskList}
-                    renderItem={(task) => <Task
-                        title={task.item.title}
-                        id={task.item.id}
-                        done={task.item.done}
-                        updateTask={updateTask}
-                        taskList={taskList}
-                        deleteTask={deleteTask}
-                    />}
-                    keyExtractor={(task) => task.id}
-                />
+                data={taskList}
+                renderItem={(task) => <Task
+                    title={task.item.title}
+                    id={task.item.id}
+                    done={task.item.done}
+                    updateTask={updateTask}
+                    taskList={taskList}
+                    deleteTask={deleteTask}
+                />}
+                keyExtractor={(task) => task.id}
+            />
         </KeyboardAvoidingView>
     );
 }

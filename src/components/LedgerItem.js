@@ -21,9 +21,9 @@ export default function LedgerItem(props) {
     }
 
     const passToTask = () => {
-        props.moveLedger({ title: text, id: props.id, done: props.done  })
+        props.moveLedger({ title: text, id: props.id, done: props.done })
     }
-    
+
     return (
         <View style={styles.taskContainer}>
             {editMode ?
@@ -45,12 +45,12 @@ export default function LedgerItem(props) {
                 </View>
                 :
                 <View style={styles.buttonWrapper}>
-                <IconButton
-                    onPress={passToTask}
-                    icon={'arrow-down-bold-box'}
-                    iconColor='grey'
-                    size={30}
-                />
+                    <IconButton
+                        onPress={passToTask}
+                        icon={'arrow-down-bold-box'}
+                        iconColor='grey'
+                        size={30}
+                    />
                     <View style={styles.card}>
                         <TextInput
                             style={styles.cardText}
@@ -59,7 +59,7 @@ export default function LedgerItem(props) {
 
                         />
                     </View>
-                    </View>
+                </View>
             }
         </View>
     );

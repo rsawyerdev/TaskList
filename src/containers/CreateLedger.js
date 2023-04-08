@@ -51,11 +51,11 @@ export default function CreateLedger() {
     }
 
     const createLedger = (ledger) => {
-        if(ledgerList){
-        const newLedgerList = ledgerList.concat();
-        newLedgerList.push(ledger);
-        setLedgerList(newLedgerList)
-        storeLedger(newLedgerList)
+        if (ledgerList) {
+            const newLedgerList = ledgerList.concat();
+            newLedgerList.push(ledger);
+            setLedgerList(newLedgerList)
+            storeLedger(newLedgerList)
         } else {
             setLedgerList(ledger)
             storeLedger(ledger)
@@ -79,11 +79,11 @@ export default function CreateLedger() {
     }
 
     const moveLedger = (ledger) => {
-        if(taskList){
-        const newTaskList = taskList.concat()
-        newTaskList.push(ledger)
-        setTaskList(newTaskList)
-        taskStorage(newTaskList)
+        if (taskList) {
+            const newTaskList = taskList.concat()
+            newTaskList.push(ledger)
+            setTaskList(newTaskList)
+            taskStorage(newTaskList)
         } else {
             setTaskList(ledger)
             taskStorage(ledger)
@@ -93,26 +93,25 @@ export default function CreateLedger() {
         newLedgerList.splice(index, 1)
         setLedgerList(newLedgerList)
         storeLedger(newLedgerList)
-    } 
+    }
 
-    console.log('createLedger')
     return (
         <View style={styles.container}>
             <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
-                <FlatList
-                    data={ledgerList}
-                    renderItem={(ledger) => <LedgerItem
-                        title={ledger.item.title}
-                        id={ledger.item.id}
-                        done={ledger.item.done}
-                        updateLedger={updateLedger}
-                        ledgerList={ledgerList}
-                        deleteLedger={deleteLedger}
-                        moveLedger={moveLedger}
-                    />}
-                    keyExtractor={(ledger) => ledger.id}
-                />
-                <AddTask createLedger={createLedger} />
+            <FlatList
+                data={ledgerList}
+                renderItem={(ledger) => <LedgerItem
+                    title={ledger.item.title}
+                    id={ledger.item.id}
+                    done={ledger.item.done}
+                    updateLedger={updateLedger}
+                    ledgerList={ledgerList}
+                    deleteLedger={deleteLedger}
+                    moveLedger={moveLedger}
+                />}
+                keyExtractor={(ledger) => ledger.id}
+            />
+            <AddTask createLedger={createLedger} />
         </View>
     );
 }
