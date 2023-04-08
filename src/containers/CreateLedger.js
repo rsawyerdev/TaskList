@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,28 +8,29 @@ import {
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { ledgerListContext } from '../context/LedgerListProvider';
 import AddTask from '../components/AddTask';
 import LedgerItem from '../components/LedgerItem'
 
 export default function CreateLedger() {
 
-    const [ledgerList, updateLedgerList] = useState([]);
+    const [ledgerList, setLedgerList] = useContext(ledgerListContext);
 
     useEffect(() => {
-        checkStorage()
+        checkLedgerStorage()
     }, []);
 
-    const checkStorage = async () => {
+    const checkLedgerStorage = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@storage_Ledger')
             const storageLedgers = jsonValue != null ? JSON.parse(jsonValue) : null;
-            updateLedgerList(storageLedgers)
+            setLedgerList(storageLedgers)
         } catch (e) {
             console.log('storage error', e)
         }
     }
 
-    const ledgerStorage = async (ledgers) => {
+    const storeLedger = async (ledgers) => {
         try {
             const ledgerValue = JSON.stringify(ledgers)
             await AsyncStorage.setItem('@storage_Ledger', ledgerValue)
@@ -39,51 +40,44 @@ export default function CreateLedger() {
     }
 
     const createLedger = (ledger) => {
-        if (ledgerList) {
-            const newLedgerList = ledgerList.concat();
-            newLedgerList.push(ledger);
-            updateLedgerList(newLedgerList)
-            ledgerStorage(newLedgerList)
-        } else {
-            newLedgerList = new Array
-            newLedgerList.push(ledger);
-            updateLedgerList(newLedgerList)
-            ledgerStorage(newLedgerList)
-        }
-
+        const newLedgerList = ledgerList.concat();
+        newLedgerList.push(ledger);
+        setLedgerList(newLedgerList)
+        storeLedger(newLedgerList)
     };
 
     const updateLedger = (newLedger) => {
         const newLedgerList = ledgerList.concat()
         const index = newLedgerList.findIndex((ledger) => ledger.id === newLedger.id)
         newLedgerList.splice(index, 1, newLedger)
-        updateLedgerList(newLedgerList)
-        ledgerStorage(newLedgerList)
+        setLedgerList(newLedgerList)
+        storeLedger(newLedgerList)
     }
 
     const deleteLedger = (removeLedger) => {
         const newLedgerList = ledgerList.concat()
         const index = newLedgerList.findIndex((ledger) => ledger.id === removeLedger.id)
         newLedgerList.splice(index, 1)
-        updateLedgerList(newLedgerList)
-        ledgerStorage(newLedgerList)
+        setLedgerList(newLedgerList)
+        storeLedger(newLedgerList)
     }
 
     return (
         <View style={styles.container}>
             <Text variant='headlineLarge' style={styles.headerText}>Ledger</Text>
-            <FlatList
-                data={ledgerList}
-                renderItem={(ledger) => <LedgerItem
-                    title={ledger.item.title}
-                    id={ledger.item.id}
-                    done={ledger.item.done}
-                    updateLedger={updateLedger}
-                    deleteLedger={deleteLedger}
-                />}
-                keyExtractor={(ledger) => ledger.id}
-            />
-            <AddTask createLedger={createLedger} />
+                <FlatList
+                    data={ledgerList}
+                    renderItem={(ledger) => <LedgerItem
+                        title={ledger.item.title}
+                        id={ledger.item.id}
+                        done={ledger.item.done}
+                        updateLedger={updateLedger}
+                        ledgerList={ledgerList}
+                        deleteLedger={deleteLedger}
+                    />}
+                    keyExtractor={(ledger) => ledger.id}
+                />
+                <AddTask createLedger={createLedger} />
         </View>
     );
 }
