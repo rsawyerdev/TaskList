@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import {
     StyleSheet,
     KeyboardAvoidingView,
@@ -8,12 +8,12 @@ import {
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import AddTask from '../components/AddTask';
+import { taskListContext } from '../context/TaskListProvider';
 import Task from '../components/Task';
 
-export default function CreateLedger() {
+export default function TaskList() {
 
-    const [taskList, updateTaskList] = useState([]);
+    const [taskList, setTaskList] = useContext(taskListContext);
 
     useEffect(() => {
         checkStorage()
@@ -23,7 +23,7 @@ export default function CreateLedger() {
         try {
             const jsonValue = await AsyncStorage.getItem('@storage_Task')
             const storageTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-            updateTaskList(storageTasks)
+            setTaskList(storageTasks)
         } catch (e) {
             console.log('storage error', e)
         }
@@ -42,7 +42,7 @@ export default function CreateLedger() {
         const newTaskList = taskList.concat()
         const index = newTaskList.findIndex((task) => task.id === newTask.id)
         newTaskList.splice(index, 1, newTask)
-        updateTaskList(newTaskList)
+        setTaskList(newTaskList)
         taskStorage(newTaskList)
     }
 
@@ -50,13 +50,25 @@ export default function CreateLedger() {
         const newTaskList = taskList.concat()
         const index = newTaskList.findIndex((task) => task.id === removeTask.id)
         newTaskList.splice(index, 1)
-        updateTaskList(newTaskList)
+        setTaskList(newTaskList)
         taskStorage(newTaskList)
     }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Text variant='headlineLarge'>Pass Ledger</Text>
+            <FlatList
+                data={taskList}
+                renderItem={(task) => <Task
+                    title={task.item.title}
+                    id={task.item.id}
+                    done={task.item.done}
+                    updateTask={updateTask}
+                    taskList={taskList}
+                    deleteTask={deleteTask}
+                />}
+                keyExtractor={(task) => task.id}
+            />
         </KeyboardAvoidingView>
     );
 }

@@ -23,9 +23,9 @@ export default function Task(props) {
 
     const setTaskComplete = () => {
         isTaskComplete(!complete)
-        props.updateTask({ title: text, id: props.id, done: !props.done  })
+        props.updateTask({ title: text, id: props.id, done: !props.done })
     }
-    
+
     return (
         <View style={styles.taskContainer}>
             {editMode ?
